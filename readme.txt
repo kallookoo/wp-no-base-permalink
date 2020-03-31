@@ -1,10 +1,10 @@
 === WP No Base Permalink ===
-Contributors: 23r9i0
+Contributors: kallookoo
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7SFE48Y4FEQL
 Tags: permalink, base, category, tag, parents, categories, parents categories
 Requires at least: 3.5
-Tested up to: 4.3.1
-Stable tag: 0.3.1
+Tested up to: 4.8
+Stable tag: 0.3.2
 License: GPL/MIT
 
 Removes category base or parents categories or tag base from your permalinks.
@@ -42,6 +42,8 @@ Simply don't have a post/page and category or tag ( if you you use this option )
 A particular installation does not allow the rewrite feature in disabling the plugin. Try after disabling the plugin, save permanent links again.
 
 == Changelog ==
+= 0.3.2 =
+* Tested version
 = 0.3.1 =
 * Unknown bug
 = 0.3 =

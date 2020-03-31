@@ -3,7 +3,7 @@
  * Plugin Name: WP No Base Permalink
  * Plugin URI: http://wordpress.org/plugins/wp-no-base-permalink/
  * Description: Removes base from your category and tag in permalinks and remove parents categories in permalinks (optional). WPML and Multisite Compatible.
- * Version: 0.2
+ * Version: 0.2.1
  * Author: Sergio P.A. (23r9i0)
  * Author URI: http://dsergio.com/
  *
@@ -45,7 +45,7 @@ class WP_No_Base_Permalink {
 		'old-tag-redirect' => 'tag', 'remove-parents-categories' => 1
 	);
 	
-	private static $version = '0.2';
+	private static $version = '0.2.1';
 	
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) )
@@ -379,9 +379,8 @@ class WP_No_Base_Permalink {
 	public function admin_enqueue_scripts( $hook ) {
 		if ( 'options-permalink.php' != $hook )
 			return;
-		
-		$debug = ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) ? 'dev/jquery.wpnbp.js' : 'jquery.wpnbp.min.js';
-		wp_register_script( 'wpnbp-scripts', plugins_url( 'include/javascript/' . $debug, __FILE__ ), array( 'jquery' ), self::$version, true );
+		$dev = ( defined( 'DSWPDEV' ) && DSWPDEV ) ? '' : '.min';
+		wp_register_script( 'wpnbp-scripts', plugins_url( 'include/javascript/jquery.wpnbp' . $dev . '.js', __FILE__ ), array( 'jquery' ), self::$version, true );
 		wp_enqueue_script( 'wpnbp-scripts' );	
 	}
 }

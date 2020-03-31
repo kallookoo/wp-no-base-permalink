@@ -3,15 +3,18 @@ Contributors: 23r9i0
 Donate link:
 Tags: permalink, base, category, tag, parents, categories, parents categories
 Requires at least: 3.5
-Tested up to: 3.6
-Stable tag: 0.1
+Tested up to: 3.8
+Stable tag: 0.2
 License: GPL/MIT
 
-Removes base from your category and tag in permalinks and more...
+Removes base from your category.
+Removes parents categories in permalinks (optional).
+Removes base tag in permalinks (optional).
 
 == Description ==
 
 Removes base from your category and tag in permalinks (optional) and remove parents categories in permalinks (optional). WPML and Multisite Compatible.
+Add Rewrites for oldest categories or tags base.
 
 == Installation ==
 
@@ -21,5 +24,8 @@ Removes base from your category and tag in permalinks (optional) and remove pare
 
 
 == Changelog ==
+= 0.2 =
+ * Fix 404 in not latin letters ( tested locally)
+ * Fix 404 for not admin users
 = 0.1 =
  * init version

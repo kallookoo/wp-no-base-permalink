@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wabe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-01 11:26+0100\n"
-"PO-Revision-Date: 2013-09-01 11:27+0100\n"
-"Last-Translator: Sergio P.A. <23r9i0@gmail.com>\n"
+"POT-Creation-Date: 2014-01-20 17:58+0100\n"
+"PO-Revision-Date: 2014-01-20 18:00+0100\n"
+"Last-Translator: 23r9i0 <23r9i0@gmail.com>\n"
 "Language-Team: 23r9i0\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -13,71 +13,71 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.3\n"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:135
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:138
 msgid "Settings"
 msgstr "Opciones"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:272
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:273
 msgid "Options for plugin WP No Base Permalink"
-msgstr "Opciones para el plugin WP No Base Permalink"
+msgstr "Opciones del plugin WP No Base Permalink"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:278
-msgid "Old Category Base"
-msgstr "Antigua categoría base"
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:279
+msgid "Oldest Categories Base"
+msgstr "Antiguas categorías base"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:286
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:287
 msgid "Optional"
 msgstr "Opcional"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:292
-msgid "Disabled Tag Base"
-msgstr "Deshabilitar etiqueta base"
-
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:301
-msgid "Old Tag Base"
-msgstr "Antigua etiqueta base"
-
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:310
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:293
 msgid "Remove Parents Categories"
 msgstr "Eliminar categorías padres"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:328
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:301
+msgid "Disabled Tag Base"
+msgstr "Deshabilitar etiqueta base"
+
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:309
+msgid "Oldest Tags Base"
+msgstr "Antiguas etiquetas base"
+
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:327
 msgid ""
-"The Old Category Base and Old Tag Base option are to customize the redirect "
-"old permalinks either with the default <code>'category', 'tag'</code> or "
-"some customized. The Remove Parents Categories option is to remove parents "
-"categories of the permalinks leaving a cleanest permalink, in my modest "
-"opinion."
+"The Oldest Categories Base and Oldest Tags Base option are to customize the "
+"redirect old permalinks either with the default <code>'category'</code>, "
+"<code>'tag'</code> or some customized. The Remove Parents Categories option "
+"is to remove parents categories of the permalinks leaving a cleanest "
+"permalink, in my modest opinion."
 msgstr ""
-"La opcion Antigua Categoría Base y la Antigua etiqueta base son para "
+"La opcion Antiguas categorías base y la Antiguas etiquetas base son para "
 "redireccionar los antiguos enlaces permanentes (permalinks) ya sea con el "
-"predeterminado <code>'category', 'tag'</code> o uno personalizado. La opcion "
-"Eliminar categorías padres el para eliminar del enlace permanente "
-"(permalink) las categorías padres dejando un enlace mas limpio, en mi "
-"modesta opinion."
+"predeterminado <code>'category'</code>, <code>'tag'</code> o uno "
+"personalizado. La opcion Eliminar categorías padres es para eliminar del "
+"enlace permanente (permalink) las categorías padres dejando un enlace mas "
+"limpio, en mi modesta opinion."
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:333
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:332
 msgid ""
-"Redirect in old categories base, by default category. For more categories "
-"base separated by <code>, </code>."
+"Redirect in oldest categories base, by default <code>'category'</code>. For "
+"more oldest categories base separated by <code>, </code>."
 msgstr ""
-"Redireccionar en las antiguas categorias base, por defecto category. Para "
-"más categorias base  separarlas con <code>, </code>."
+"Redireccionar las antiguas categorías base, por defecto <code>'category'</"
+"code>. Para más antiguas categorías base separarlas con <code>, </code>."
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:339
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:350
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:337
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:342
 msgid "Activated by default."
 msgstr "Activado por defecto."
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:344
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:347
 msgid ""
-"Redirect in old tag base, by default tag. For more tag base separated by "
-"<code>, </code>."
+"Redirect in old tag base, by default <code>'tag'</code>. For more oldest tag "
+"base separated by <code>, </code>."
 msgstr ""
-"Redireccionar en las antiguas etiquetas base, por defecto tag. Para más "
-"etiquetas base  separarlas con <code>, </code>."
+"Redireccionar las antiguas etiquetas base, por defecto <code>'tag'</code>. "
+"Para más antiguas etiquetas base separarlas con <code>, </code>."
 
 #~ msgid "Deactivated by default."
 #~ msgstr "Desactivado por defecto."

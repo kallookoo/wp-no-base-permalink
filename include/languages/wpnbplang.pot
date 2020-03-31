@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP No Base Permalink\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-01 11:26+0100\n"
-"PO-Revision-Date: 2013-09-01 11:26+0100\n"
-"Last-Translator: Sergio P.A. <23r9i0@gmail.com>\n"
+"POT-Creation-Date: 2014-01-20 17:58+0100\n"
+"PO-Revision-Date: 2014-01-20 17:59+0100\n"
+"Last-Translator: 23r9i0 <23r9i0@gmail.com>\n"
 "Language-Team: 23ri90 <23r9i0@gmail.com>\n"
 "Language: en_ES\n"
 "MIME-Version: 1.0\n"
@@ -13,60 +13,60 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.3\n"
 "X-Poedit-SearchPath-0: D:\\xampp\\htdocs\\wp\\wp-content\\plugins\\wp-no-"
 "base-permalink\n"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:135
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:138
 msgid "Settings"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:272
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:273
 msgid "Options for plugin WP No Base Permalink"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:278
-msgid "Old Category Base"
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:279
+msgid "Oldest Categories Base"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:286
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:287
 msgid "Optional"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:292
-msgid "Disabled Tag Base"
-msgstr ""
-
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:301
-msgid "Old Tag Base"
-msgstr ""
-
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:310
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:293
 msgid "Remove Parents Categories"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:328
-msgid ""
-"The Old Category Base and Old Tag Base option are to customize the redirect "
-"old permalinks either with the default <code>'category', 'tag'</code> or "
-"some customized. The Remove Parents Categories option is to remove parents "
-"categories of the permalinks leaving a cleanest permalink, in my modest "
-"opinion."
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:301
+msgid "Disabled Tag Base"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:333
-msgid ""
-"Redirect in old categories base, by default category. For more categories "
-"base separated by <code>, </code>."
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:309
+msgid "Oldest Tags Base"
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:339
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:350
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:327
+msgid ""
+"The Oldest Categories Base and Oldest Tags Base option are to customize the "
+"redirect old permalinks either with the default <code>'category'</code>, "
+"<code>'tag'</code> or some customized. The Remove Parents Categories option "
+"is to remove parents categories of the permalinks leaving a cleanest "
+"permalink, in my modest opinion."
+msgstr ""
+
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:332
+msgid ""
+"Redirect in oldest categories base, by default <code>'category'</code>. For "
+"more oldest categories base separated by <code>, </code>."
+msgstr ""
+
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:337
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:342
 msgid "Activated by default."
 msgstr ""
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:344
+#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:347
 msgid ""
-"Redirect in old tag base, by default tag. For more tag base separated by "
-"<code>, </code>."
+"Redirect in old tag base, by default <code>'tag'</code>. For more oldest tag "
+"base separated by <code>, </code>."
 msgstr ""

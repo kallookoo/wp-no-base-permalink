@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wabe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-20 17:58+0100\n"
-"PO-Revision-Date: 2014-01-20 18:00+0100\n"
+"POT-Creation-Date: 2015-11-16 09:59+0100\n"
+"PO-Revision-Date: 2015-11-16 10:06+0100\n"
 "Last-Translator: 23r9i0 <23r9i0@gmail.com>\n"
 "Language-Team: 23r9i0\n"
 "Language: es_ES\n"
@@ -13,71 +13,114 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.8.6\n"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:138
+#: wp-no-base-permalink.php:114
 msgid "Settings"
 msgstr "Opciones"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:273
-msgid "Options for plugin WP No Base Permalink"
-msgstr "Opciones del plugin WP No Base Permalink"
+#: wp-no-base-permalink.php:125
+msgid "Donate"
+msgstr "Donar"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:279
-msgid "Oldest Categories Base"
-msgstr "Antiguas categorías base"
+#: wp-no-base-permalink.php:313
+msgid "WP No Base Permalink"
+msgstr "WP No Base Permalink"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:287
-msgid "Optional"
-msgstr "Opcional"
+#: wp-no-base-permalink.php:318
+msgid "Disabled Category Base"
+msgstr "Deshabilitar Categoría Base"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:293
+#: wp-no-base-permalink.php:324
+msgid "Categories Base"
+msgstr "Categorías Base "
+
+#: wp-no-base-permalink.php:330
 msgid "Remove Parents Categories"
 msgstr "Eliminar categorías padres"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:301
+#: wp-no-base-permalink.php:336
 msgid "Disabled Tag Base"
 msgstr "Deshabilitar etiqueta base"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:309
-msgid "Oldest Tags Base"
-msgstr "Antiguas etiquetas base"
+#: wp-no-base-permalink.php:342
+msgid "Tags Base"
+msgstr "Etiquetas Base"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:327
+#: wp-no-base-permalink.php:358
+msgid "Remove Category Base of the permalinks"
+msgstr "Elimina Categoría Base de los enlaces permanentes"
+
+#: wp-no-base-permalink.php:365
 msgid ""
-"The Oldest Categories Base and Oldest Tags Base option are to customize the "
-"redirect old permalinks either with the default <code>'category'</code>, "
-"<code>'tag'</code> or some customized. The Remove Parents Categories option "
-"is to remove parents categories of the permalinks leaving a cleanest "
-"permalink, in my modest opinion."
+"Redirect old categories base, by default add the <code>'category'</code> "
+"base. For other categories base separated by <code>, </code>."
 msgstr ""
-"La opcion Antiguas categorías base y la Antiguas etiquetas base son para "
-"redireccionar los antiguos enlaces permanentes (permalinks) ya sea con el "
-"predeterminado <code>'category'</code>, <code>'tag'</code> o uno "
-"personalizado. La opcion Eliminar categorías padres es para eliminar del "
-"enlace permanente (permalink) las categorías padres dejando un enlace mas "
-"limpio, en mi modesta opinion."
+"Redirigir antiguas categorías base, por defecto añade la <code> 'categoría' "
+"</code> base. Para otras categorías base separarlas por <code>, </code>."
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:332
+#: wp-no-base-permalink.php:372
 msgid ""
-"Redirect in oldest categories base, by default <code>'category'</code>. For "
-"more oldest categories base separated by <code>, </code>."
+"Remove parents categories of the permalinks leaving a cleanest permalink, in "
+"my modest opinion."
 msgstr ""
-"Redireccionar las antiguas categorías base, por defecto <code>'category'</"
-"code>. Para más antiguas categorías base separarlas con <code>, </code>."
+"Elimina categorías padres de los enlaces permanentes dejando un enlace "
+"permanente más limpio, en mi modesta opinión."
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:337
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:342
-msgid "Activated by default."
-msgstr "Activado por defecto."
+#: wp-no-base-permalink.php:379
+msgid "Remove Tag Base of the permalinks."
+msgstr "Elimina Etiqueta Base de los enlaces permanentes (permalinks)"
 
-#: D:\xampp\htdocs\wp\wp-content\plugins\wp-no-base-permalink/wp-no-base-permalink.php:347
+#: wp-no-base-permalink.php:386
 msgid ""
-"Redirect in old tag base, by default <code>'tag'</code>. For more oldest tag "
+"Redirect tag base, by default add the <code>'tag'</code> base. For other tag "
 "base separated by <code>, </code>."
 msgstr ""
-"Redireccionar las antiguas etiquetas base, por defecto <code>'tag'</code>. "
-"Para más antiguas etiquetas base separarlas con <code>, </code>."
+"Redirigir antiguas etiquetas base, por defecto añade la <code> 'tag' </code> "
+"base. Para otras categorías base separarlas por <code>, </code>."
+
+#~ msgid "Options for plugin WP No Base Permalink"
+#~ msgstr "Opciones del plugin WP No Base Permalink"
+
+#~ msgid "Oldest Categories Base"
+#~ msgstr "Antiguas categorías base"
+
+#~ msgid "Optional"
+#~ msgstr "Opcional"
+
+#~ msgid "Oldest Tags Base"
+#~ msgstr "Antiguas etiquetas base"
+
+#~ msgid ""
+#~ "The Oldest Categories Base and Oldest Tags Base option are to customize "
+#~ "the redirect old permalinks either with the default <code>'category'</"
+#~ "code>, <code>'tag'</code> or some customized. The Remove Parents "
+#~ "Categories option is to remove parents categories of the permalinks "
+#~ "leaving a cleanest permalink, in my modest opinion."
+#~ msgstr ""
+#~ "La opcion Antiguas categorías base y la Antiguas etiquetas base son para "
+#~ "redireccionar los antiguos enlaces permanentes (permalinks) ya sea con el "
+#~ "predeterminado <code>'category'</code>, <code>'tag'</code> o uno "
+#~ "personalizado. La opcion Eliminar categorías padres es para eliminar del "
+#~ "enlace permanente (permalink) las categorías padres dejando un enlace mas "
+#~ "limpio, en mi modesta opinion."
+
+#~ msgid ""
+#~ "Redirect in oldest categories base, by default <code>'category'</code>. "
+#~ "For more oldest categories base separated by <code>, </code>."
+#~ msgstr ""
+#~ "Redireccionar las antiguas categorías base, por defecto <code>'category'</"
+#~ "code>. Para más antiguas categorías base separarlas con <code>, </code>."
+
+#~ msgid "Activated by default."
+#~ msgstr "Activado por defecto."
+
+#~ msgid ""
+#~ "Redirect in old tag base, by default <code>'tag'</code>. For more oldest "
+#~ "tag base separated by <code>, </code>."
+#~ msgstr ""
+#~ "Redireccionar las antiguas etiquetas base, por defecto <code>'tag'</"
+#~ "code>. Para más antiguas etiquetas base separarlas con <code>, </code>."
 
 #~ msgid "Deactivated by default."
 #~ msgstr "Desactivado por defecto."

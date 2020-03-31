@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: permalink, base, category, tag, parents, categories, parents categories
 Requires at least: 3.5
 Tested up to: 4.3.1
-Stable tag: 0.3
+Stable tag: 0.3.1
 License: GPL/MIT
 
 Removes category base or parents categories or tag base from your permalinks.
@@ -42,6 +42,8 @@ Simply don't have a post/page and category or tag ( if you you use this option )
 A particular installation does not allow the rewrite feature in disabling the plugin. Try after disabling the plugin, save permanent links again.
 
 == Changelog ==
+= 0.3.1 =
+* Unknown bug
 = 0.3 =
 * Updated certain parts to fix issues
 * Change Remove Category Base to optional. By default is enabled.
@@ -61,6 +63,8 @@ A particular installation does not allow the rewrite feature in disabling the pl
  * init version
 
 == Upgrade Notice ==
+= 0.3.1 =
+Bug: on activation, please force saved settings, investigating the motive.
 = 0.3 =
 Resolve issues
 = 0.2.3 =

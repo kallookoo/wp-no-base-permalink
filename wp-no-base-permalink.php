@@ -3,43 +3,24 @@
  * Plugin Name: WP No Base Permalink
  * Plugin URI: https://wordpress.org/plugins/wp-no-base-permalink/
  * Description: Removes category base or tag base (optional) from your category or tag permalinks and removes parents categories from your category permalinks (optional). Compatible with WPML Plugin and WordPress Multisite.
- * Version: 0.3.2
+ * Version: 1.0
  * Author: Sergio ( kallookoo )
  * Author URI: http://dsergio.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: wp-no-base-permalink
+ * Domain Path: /languages
  */
 
-add_action( 'plugins_loaded', array( 'WP_No_Base_Permalink', 'on_load' ) );
-register_activation_hook( __FILE__, array( 'WP_No_Base_Permalink', 'on_activation' ) );
-register_deactivation_hook( __FILE__, array( 'WP_No_Base_Permalink', 'on_deactivation' ) );
+namespace kallookoo\wp_no_base_permalink;
 
-if ( ! class_exists( 'WP_No_Base_Permalink') ) :
-class WP_No_Base_Permalink {
+class Plugin {
 
-	const DOMAIN = 'wpnbplang';
+	const VERSION = '1.0';
 
-	private static $_options;
+	private static $options;
 
 	public static function on_activation() {
-		$default = array( 'disabled-category-base' => '1' );
-
-		if ( $options = get_option( 'wp_no_base_permalink' ) ) {
-			if ( get_option( 'wp_no_base_permalink_version' ) ) {
-				$options = array_merge( $options, $default );
-				delete_option( 'wp_no_base_permalink_version' );
-			}
-
-			if ( $update = self::_update_options( $options ) ) {
-				update_option( 'wp_no_base_permalink', $update );
-			} else {
-				delete_option( 'wp_no_base_permalink' );
-			}
-
-		} else {
-			update_option( 'wp_no_base_permalink', $default );
-		}
-
 		update_option( 'wp_no_base_permalink_flush', 1 );
 	}
 
@@ -51,25 +32,48 @@ class WP_No_Base_Permalink {
 		add_action( 'shutdown', array( __CLASS__, 'flush_rewrite_rules' ) );
 	}
 
-	public static function on_load() {
-		add_filter( 'plugin_action_links' , array( __CLASS__, 'plugin_action_links' ), 10, 2 );
-		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 4 );
-		if ( current_user_can( 'manage_options' ) )
-			add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
-		load_plugin_textdomain( self::DOMAIN, false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+	public static function on_init() {
+		if ( is_admin() ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+			}
 
-		if ( get_option( 'wp_no_base_permalink_flush' ) ) {
-			add_action( 'shutdown', array( __CLASS__, 'flush_rewrite_rules' ) );
-			delete_option( 'wp_no_base_permalink_flush' );
-		} else {
-			remove_action( 'shutdown', array( __CLASS__, 'flush_rewrite_rules' ) );
+			load_plugin_textdomain( 'wp-no-base-permalink', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+
+			add_filter( 'plugin_action_links' , array( __CLASS__, 'plugin_action_links' ), 10, 2 );
+			add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 4 );
+
+			if ( get_option( 'wp_no_base_permalink_flush' ) ) {
+				add_action( 'shutdown', array( __CLASS__, 'flush_rewrite_rules' ) );
+				delete_option( 'wp_no_base_permalink_flush' );
+			} else {
+				remove_action( 'shutdown', array( __CLASS__, 'flush_rewrite_rules' ) );
+			}
+
+			$default = array( 'disabled-category-base' => '1' );
+			$options = get_option( 'wp_no_base_permalink' );
+
+			if ( $options ) {
+				$version = get_option( 'wp_no_base_permalink_version' );
+				if ( $version ) {
+					$options = array_merge( $options, $default );
+					update_option( 'wp_no_base_permalink_version', self::VERSION );
+				}
+
+				if ( $update = self::_update_options( $options ) ) {
+					update_option( 'wp_no_base_permalink', $update );
+				}
+			} else {
+				update_option( 'wp_no_base_permalink', $default );
+			}
+
 		}
 
-		self::$_options = get_option( 'wp_no_base_permalink', array() );
+		self::$options = get_option( 'wp_no_base_permalink' );
 
 		if (
-			isset( self::$_options['disabled-category-base'] ) ||
-			isset( self::$_options['remove-parents-categories'] )
+			isset( self::$options['disabled-category-base'] ) ||
+			isset( self::$options['remove-parents-categories'] )
 		) {
 			add_action( 'created_category', array( __CLASS__, 'flush_rewrite_rules' ), 999 );
 			add_action( 'edited_category', array( __CLASS__, 'flush_rewrite_rules' ), 999 );
@@ -83,7 +87,7 @@ class WP_No_Base_Permalink {
 		}
 
 
-		if ( isset( self::$_options['disabled-tag-base'] ) ) {
+		if ( isset( self::$options['disabled-tag-base'] ) ) {
 			add_action( 'created_post_tag', array( __CLASS__, 'flush_rewrite_rules' ), 999 );
 			add_action( 'edited_post_tag', array( __CLASS__, 'flush_rewrite_rules' ), 999 );
 			add_action( 'delete_post_tag', array( __CLASS__, 'flush_rewrite_rules' ), 999 );
@@ -96,9 +100,9 @@ class WP_No_Base_Permalink {
 		}
 
 		if (
-			isset( self::$_options['disabled-category-base'] ) ||
-			isset( self::$_options['remove-parents-categories'] ) ||
-			isset( self::$_options['disabled-tag-base'] )
+			isset( self::$options['disabled-category-base'] ) ||
+			isset( self::$options['remove-parents-categories'] ) ||
+			isset( self::$options['disabled-tag-base'] )
 		) {
 			add_filter( 'term_link', array( __CLASS__, 'term_link' ), 10, 3 );
 			add_filter( 'query_vars', array( __CLASS__, 'query_vars' ) );
@@ -116,8 +120,8 @@ class WP_No_Base_Permalink {
 
 	public static function plugin_action_links( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
-			$link_setting = '<a href="'. get_admin_url( null, 'options-permalink.php' ) .'">' . __( 'Settings', self::DOMAIN ) . '</a>';
-			array_unshift( $links, $link_setting );
+			$link = sprintf( '<a href="%s">%s</a>', admin_url( 'options-permalink.php' ), __( 'Settings', 'wp-no-base-permalink' ) );
+			array_unshift( $links, $link );
 		}
 
 		return $links;
@@ -126,8 +130,8 @@ class WP_No_Base_Permalink {
 	public static function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 		if( $plugin_file === plugin_basename( __FILE__ ) ) {
 			$plugin_meta[] = sprintf(
-				'<a target="_blank" href="%s">%s</a>',
-				esc_url( 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7SFE48Y4FEQL' ), __( 'Donate', self::DOMAIN )
+				'<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7SFE48Y4FEQL">%s</a>',
+				__( 'Make a donation', 'wp-no-base-permalink' )
 			);
 		}
 
@@ -176,8 +180,8 @@ class WP_No_Base_Permalink {
 	public static function category_rewrite_rules( $rewrite ) {
 		$category_rewrite = array();
 		$blog_prefix      = ( is_multisite() && ! is_subdomain_install() && is_main_site() ) ? 'blog/' : '';
-		$include_parents  = isset( self::$_options['remove-parents-categories'] ) ? false : true;
-		$category_base    = ! isset( self::$_options['disabled-category-base'] ) ? ( $cb = get_option( 'category_base' ) ? $cb . '/' : 'category/' ) : '';
+		$include_parents  = isset( self::$options['remove-parents-categories'] ) ? false : true;
+		$category_base    = ! isset( self::$options['disabled-category-base'] ) ? ( $cb = get_option( 'category_base' ) ? $cb . '/' : 'category/' ) : '';
 		$categories       = self::_regex_categories( $include_parents );
 
 		if ( ! is_wp_error( $categories ) ) {
@@ -206,10 +210,10 @@ class WP_No_Base_Permalink {
 				}
 			}
 
-			if ( isset( self::$_options['disabled-category-base'] ) ) {
+			if ( isset( self::$options['disabled-category-base'] ) ) {
 				$old_category_base = array( 'category' );
-				if ( isset( self::$_options['old-category-redirect'] ) && is_array( self::$_options['old-category-redirect'] ) )
-					$old_category_base = array_merge( $old_category_base, self::$_options['old-category-redirect']  );
+				if ( isset( self::$options['old-category-redirect'] ) && is_array( self::$options['old-category-redirect'] ) )
+					$old_category_base = array_merge( $old_category_base, self::$options['old-category-redirect']  );
 
 				if ( $category_base_option = get_option( 'category_base' ) )
 					$old_category_base = array_merge( $old_category_base, array( $category_base_option ) );
@@ -247,8 +251,8 @@ class WP_No_Base_Permalink {
 			}
 
 			$old_tag_base = array( 'tag' );
-			if ( isset( self::$_options['old-tag-redirect'] ) && is_array( self::$_options['old-tag-redirect'] ) )
-				$old_tag_base = array_merge( $old_tag_base, self::$_options['old-tag-redirect']  );
+			if ( isset( self::$options['old-tag-redirect'] ) && is_array( self::$options['old-tag-redirect'] ) )
+				$old_tag_base = array_merge( $old_tag_base, self::$options['old-tag-redirect']  );
 
 			if ( $tag_base_option = get_option( 'tag_base' ) )
 				$old_tag_base = array_merge( $old_tag_base, array( $tag_base_option ) );
@@ -265,7 +269,7 @@ class WP_No_Base_Permalink {
 
 	public static function term_link( $link, $term, $taxonomy = '' ) {
 		if ( 'category' === $taxonomy ) {
-			if ( isset( self::$_options['disabled-category-base'] ) ) {
+			if ( isset( self::$options['disabled-category-base'] ) ) {
 				$category_base = get_option( 'category_base', '' );
 				if ( '' === $category_base )
 					$category_base = 'category';
@@ -276,13 +280,13 @@ class WP_No_Base_Permalink {
 				$link = preg_replace( '/' . preg_quote( $category_base . '/', '/' ) . '/i', '', $link, 1 );
 			}
 
-			if ( 0 != $term->parent && isset( self::$_options['remove-parents-categories'] ) ) {
+			if ( 0 != $term->parent && isset( self::$options['remove-parents-categories'] ) ) {
 				$parents = get_category_parents( $term->parent, false, '/', true );
 				if ( ! is_wp_error( $parents ) )
 					$link = preg_replace( '/' . preg_quote( $parents, '/' ) . '/i', '', $link, 1 );
 			}
 
-		} elseif ( 'post_tag' === $taxonomy && isset( self::$_options['disabled-tag-base'] ) ) {
+		} elseif ( 'post_tag' === $taxonomy && isset( self::$options['disabled-tag-base'] ) ) {
 			$tag_base = get_option( 'tag_base', '' );
 			if ( '' === $tag_base )
 				$tag_base = 'tag';
@@ -297,10 +301,10 @@ class WP_No_Base_Permalink {
 	}
 
 	public static function query_vars( $query_vars ) {
-		if ( isset( self::$_options['disabled-category-base'] ) || isset( self::$_options['remove-parents-categories'] ) )
+		if ( isset( self::$options['disabled-category-base'] ) || isset( self::$options['remove-parents-categories'] ) )
 			$query_vars[] = 'category_redirect';
 
-		if ( isset( self::$_options['disabled-tag-base'] ) )
+		if ( isset( self::$options['disabled-tag-base'] ) )
 			$query_vars[] = 'tag_redirect';
 
 		return $query_vars;
@@ -324,36 +328,36 @@ class WP_No_Base_Permalink {
 
 	public static function admin_init() {
 		add_settings_section(
-			'wp_no_base_permalink-section', __( 'WP No Base Permalink', self::DOMAIN ),
-			'__return_false', 'permalink'
+			'wp_no_base_permalink-section', __( 'WP No Base Permalink',
+			'wp-no-base-permalink' ), '__return_false', 'permalink'
 		);
 
 		add_settings_field(
-			'disabled-category-base', __( 'Disabled Category Base',self::DOMAIN ),
+			'disabled-category-base', __( 'Disabled Category Base', 'wp-no-base-permalink' ),
 			array( __CLASS__, 'disabled_category_base' ), 'permalink',
 			'wp_no_base_permalink-section', array( 'label_for' => 'disabled-category-base' )
 		);
 
 		add_settings_field(
-			'old-category-redirect', __( 'Categories Base',self::DOMAIN ),
+			'old-category-redirect', __( 'Categories Base','wp-no-base-permalink' ),
 			array( __CLASS__, 'old_category_redirect' ), 'permalink',
 			'wp_no_base_permalink-section', array( 'label_for' => 'old-category-redirect' )
 		);
 
 		add_settings_field(
-			'remove-parents-categories', __( 'Remove Parents Categories', self::DOMAIN ),
+			'remove-parents-categories', __( 'Remove Parents Categories', 'wp-no-base-permalink' ),
 			array( __CLASS__, 'remove_parents_categories' ), 'permalink',
 			'wp_no_base_permalink-section', array( 'label_for' => 'remove-parents-categories' )
 		);
 
 		add_settings_field(
-			'disabled-tag-base', __( 'Disabled Tag Base',self::DOMAIN ),
+			'disabled-tag-base', __( 'Disabled Tag Base','wp-no-base-permalink' ),
 			array( __CLASS__, 'disabled_tag_base' ), 'permalink',
 			'wp_no_base_permalink-section', array( 'label_for' => 'disabled-tag-base' )
 		);
 
 		add_settings_field(
-			'old-tag-redirect', __( 'Tags Base',self::DOMAIN ),
+			'old-tag-redirect', __( 'Tags Base','wp-no-base-permalink' ),
 			array( __CLASS__, 'old_tags_redirect' ), 'permalink',
 			'wp_no_base_permalink-section', array( 'label_for' => 'old-tag-redirect' )
 		);
@@ -381,43 +385,44 @@ class WP_No_Base_Permalink {
 
 	public static function disabled_category_base() {
 		?>
-		<input name="wp-no-base-permalink[disabled-category-base]" id="disabled-category-base" type="checkbox" value="1"<?php checked( true, isset( self::$_options['disabled-category-base'] ) ); ?>/>
-		<p class="description"><?php _e( 'Remove Category Base of the permalinks', self::DOMAIN ); ?></p>
+		<input name="wp-no-base-permalink[disabled-category-base]" id="disabled-category-base" type="checkbox" value="1"<?php checked( isset( self::$options['disabled-category-base'] ) ); ?>>
+		<p class="description"><?php _e( 'Remove Category Base of the permalinks', 'wp-no-base-permalink' ); ?></p>
 		<?php
 	}
 
 	public static function old_category_redirect() {
 		?>
-		<input name="wp-no-base-permalink[old-category-redirect]" id="old-category-redirect" type="text" value="<?php self::_array_to_string( 'old-category-redirect' ); ?>" class="regular-text code" />
-		<p class="description"><?php _e( 'Redirect old categories base, by default add the <code>\'category\'</code> base. For other categories base separated by <code>, </code>.', self::DOMAIN ); ?></p>
+		<input name="wp-no-base-permalink[old-category-redirect]" id="old-category-redirect" type="text" value="<?php self::_array_to_string( 'old-category-redirect' ); ?>" class="regular-text code">
+		<p class="description"><?php _e( 'Redirect old categories base, by default add the <code>\'category\'</code> base. For other categories base separated by <code>, </code>.', 'wp-no-base-permalink' ); ?></p>
 		<?php
 	}
 
 	public static function remove_parents_categories() {
 		?>
-		<input name="wp-no-base-permalink[remove-parents-categories]" id="remove-parents-categories" type="checkbox" value="1"<?php checked( true, isset( self::$_options['remove-parents-categories'] ) ); ?> />
-		<p class="description"><?php _e( 'Remove parents categories of the permalinks leaving a cleanest permalink, in my modest opinion.', self::DOMAIN ); ?></p>
+		<input name="wp-no-base-permalink[remove-parents-categories]" id="remove-parents-categories" type="checkbox" value="1"<?php checked( isset( self::$options['remove-parents-categories'] ) ); ?>>
+		<p class="description"><?php _e( 'Remove parents categories of the permalinks leaving a cleanest permalink, in my modest opinion.', 'wp-no-base-permalink' ); ?></p>
 		<?php
 	}
 
 	public static function disabled_tag_base() {
 		?>
-		<input name="wp-no-base-permalink[disabled-tag-base]" id="disabled-tag-base" type="checkbox" value="1"<?php checked( true, isset( self::$_options['disabled-tag-base'] ) ); ?> />
-		<p class="description"><?php _e( 'Remove Tag Base of the permalinks.', self::DOMAIN ); ?></p>
+		<input name="wp-no-base-permalink[disabled-tag-base]" id="disabled-tag-base" type="checkbox" value="1"<?php checked( isset( self::$options['disabled-tag-base'] ) ); ?>>
+		<p class="description"><?php _e( 'Remove Tag Base of the permalinks.', 'wp-no-base-permalink' ); ?></p>
 		<?php
 	}
 
 	public static function old_tags_redirect() {
 		?>
-		<input name="wp-no-base-permalink[old-tag-redirect]" id="old-tag-redirect" type="text" value="<?php self::_array_to_string( 'old-tag-redirect' ); ?>" class="regular-text code" />
-		<p class="description"><?php _e( 'Redirect tag base, by default add the <code>\'tag\'</code> base. For other tag base separated by <code>, </code>.', self::DOMAIN ); ?></p>
+		<input name="wp-no-base-permalink[old-tag-redirect]" id="old-tag-redirect" type="text" value="<?php self::_array_to_string( 'old-tag-redirect' ); ?>" class="regular-text code">
+		<p class="description"><?php _e( 'Redirect tag base, by default add the <code>\'tag\'</code> base. For other tag base separated by <code>, </code>.', 'wp-no-base-permalink' ); ?></p>
 		<?php
 	}
 
 	private static function _array_to_string( $element ) {
 		$string = '';
-		if ( isset( self::$_options[ $element ] ) )
-			$string = implode( ', ', ( array ) self::$_options[ $element ] );
+		if ( isset( self::$options[ $element ] ) ) {
+			$string = implode( ', ', ( array ) self::$options[ $element ] );
+		}
 
 		echo esc_attr( $string );
 	}
@@ -463,4 +468,6 @@ class WP_No_Base_Permalink {
 		return count( $update ) ? $update : false;
 	}
 }
-endif;
+
+add_action( 'init', __NAMESPACE__ . '\\Plugin::on_init', 10 );
+register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\Plugin::on_deactivation' );

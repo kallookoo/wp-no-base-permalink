@@ -3,8 +3,8 @@ Contributors: 23r9i0
 Donate link:
 Tags: permalink, base, category, tag, parents, categories, parents categories
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: 0.2.2
+Tested up to: 4.2.2
+Stable tag: 0.2.3
 License: GPL/MIT
 
 Removes base from your category.
@@ -24,6 +24,9 @@ Add Rewrites for oldest categories or tags base.
 
 
 == Changelog ==
+= 0.2.3 =
+* Update Tested Version
+* Add Disabled plugin update on PHP 5.3, last updated Require 5.4 or later
 = 0.2.2 =
 * fix constant developer
 = 0.2.1 =
@@ -34,3 +37,6 @@ Add Rewrites for oldest categories or tags base.
 = 0.1 =
  * init version
 
+== Upgrade Notice ==
+= 0.2.3 =
+Add Disabled plugin update on PHP 5.3, last updated Require 5.4 or later

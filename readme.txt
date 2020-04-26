@@ -1,23 +1,22 @@
 === WP No Base Permalink ===
 Contributors: kallookoo
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7SFE48Y4FEQL
-Tags: permalink, base, category, tag, parents, categories, parents categories
-Requires at least: 3.5
-Tested up to: 4.8.1
-Stable tag: 1.0
-License: GPL
+Tags: permalink, taxonomy, taxonomy base, taxonomy slug, slug, terms, terms parents, terms slug, category, category base, tag, tag base
+Requires at least: 5.4
+Tested up to: 5.4
+Requires PHP: 7.3
+Stable tag: 2.0.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Removes category base or parents categories or tag base from your permalinks.
-
-Compatible with WPML Plugin and WordPress Multisite.
+Remove taxonomy slug and remove terms parents in hierarchical taxonomies from your permalinks.
 
 == Description ==
 
-Removes category base from your category permalinks (optional). By default is enabled.
-Removes parents categories from your category permalinks (optional).
-Removes tag base from your tag permalinks (optional).
+Remove the taxonomy slug from your permalinks, by default after enabled the taxonomy is enabled.
+Remove on hierarchical taxonomies the terms parents from your permalinks.
 
-The three options above are optional and generate their own rewrite rules.
+The options above are optional and generate their own rewrite rules.
 
 Compatible with WPML Plugin and WordPress Multisite.
 
@@ -34,14 +33,15 @@ Read the [FAQ](https://wordpress.org/plugins/wp-no-base-permalink/faq/) before u
 
 = Won't this conflict with posts/pages? =
 
-Simply don't have a post/page and category or tag ( if you you use this option ) with the same slug. Warning!!!, if they have the same slug will prioritize the category or tag slug.
+Simply don't have a post/page and taxonomy ( if you use this option ) with the same slug. Warning!!!, if they have the same slug will prioritize the taxonomy slug.
 
-
-= The plugin has been uninstalled, but the slug /category/ or /tag/ did not reappear why? =
+= The plugin has been uninstalled, but the slug for taxonomy did not reappear why? =
 
 A particular installation does not allow the rewrite feature in disabling the plugin. Try after disabling the plugin, save permanent links again.
 
 == Changelog ==
+= 2.0 =
+* The plugin support multiple taxonomies
 = 1.0 =
 * Rewrite plugin for resolve bug
 = 0.3.2 =

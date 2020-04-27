@@ -19,7 +19,7 @@ class Options {
 	 *
 	 * @var array
 	 */
-	private static $values;
+	private static $options;
 
 	/**
 	 * Find the single option recursively
@@ -51,10 +51,10 @@ class Options {
 	 * @return array
 	 */
 	public static function get_all() {
-		if ( ! is_array( self::$values ) ) {
-			self::$values = get_option( 'wp_no_base_permalink' );
+		if ( ! is_array( self::$options ) ) {
+			self::$options = get_option( 'wp_no_base_permalink' );
 		}
-		return ( is_array( self::$values ) ? self::$values : [] );
+		return ( is_array( self::$options ) ? self::$options : [] );
 	}
 
 	/**
@@ -70,16 +70,109 @@ class Options {
 	}
 
 	/**
+	 * Sanitized and save settings
+	 */
+	public static function save() {
+		if ( isset( $_POST['wp-no-base-permalink'] ) && current_user_can( 'manage_options' ) ) {
+			check_admin_referer( 'update-permalink' );
+
+			$options = map_deep( wp_unslash( $_POST['wp-no-base-permalink'] ), 'sanitize_text_field' );
+			if ( $options && is_array( $options ) ) {
+				$sanitized = [
+					'taxonomies' => [],
+					'selected'   => [],
+				];
+
+				$taxonomies = [];
+				if ( array_key_exists( 'taxonomies', $options ) ) {
+					$taxonomies = $options['taxonomies'];
+				}
+
+				if ( array_key_exists( 'selected', $options ) ) {
+					foreach ( array_keys( $options['selected'] ) as $taxonomy ) {
+						if ( taxonomy_exists( $taxonomy ) ) {
+							$sanitized['taxonomies'][ $taxonomy ] = [
+								'remove'    => 'yes',
+								'redirects' => [],
+							];
+
+							if ( is_taxonomy_hierarchical( $taxonomy ) ) {
+								$sanitized['taxonomies'][ $taxonomy ]['parents'] = 'yes';
+							}
+
+							if ( ! array_key_exists( $taxonomy, $taxonomies ) || ! is_array( $taxonomies[ $taxonomy ] ) ) {
+								continue;
+							}
+
+							$tax_options = $taxonomies[ $taxonomy ];
+							if ( ! array_key_exists( 'remove', $tax_options ) ) {
+								$sanitized['taxonomies'][ $taxonomy ]['remove'] = 'no';
+							}
+
+							if (
+								array_key_exists( 'parents', $sanitized['taxonomies'][ $taxonomy ] ) &&
+								! array_key_exists( 'parents', $tax_options )
+							) {
+								$sanitized['taxonomies'][ $taxonomy ]['parents'] = 'no';
+							}
+
+							if (
+								array_key_exists( 'redirects', $tax_options ) &&
+								( ! empty( $tax_options['redirects'] ) && is_string( $tax_options['redirects'] ) )
+							) {
+								$redirects = array_map(
+									function ( $a ) {
+										return trim( trim( $a ), '/' );
+									},
+									preg_split( '@(,| )@', wp_strip_all_tags( $tax_options['redirects'], true ) )
+								);
+								$redirects = array_filter( array_unique( $redirects ) );
+
+								if ( ! empty( $redirects ) ) {
+									$tax_obj = get_taxonomy( $taxonomy );
+									if ( $tax_obj instanceof \WP_Taxonomy ) {
+										if ( 'category' === $taxonomy ) {
+											$tax_slug = 'category';
+										} elseif ( 'post_tag' === $taxonomy ) {
+											$tax_slug = 'tag';
+										} elseif ( function_exists( '\wc_get_permalink_structure' ) ) {
+											if ( 'product_cat' === $taxonomy ) {
+												$tax_slug = _x( 'product-category', 'slug', 'woocommerce' );
+											} elseif ( 'product_tag' === $taxonomy ) {
+												$tax_slug = _x( 'product-tag', 'slug', 'woocommerce' );
+											}
+										}
+										$tax_slug  = ( empty( $tax_slug ) ? $tax_obj->rewrite['slug'] : $tax_slug );
+										$key_found = array_search( trim( $tax_slug, '/' ), $redirects, true );
+										if ( is_numeric( $key_found ) ) {
+											unset( $redirects[ $key_found ] );
+										}
+									}
+								}
+							}
+
+							if ( ! empty( $redirects ) ) {
+								$sanitized['taxonomies'][ $taxonomy ]['redirects'] = $redirects;
+							}
+						}
+					}
+				}
+
+				self::update( $sanitized );
+			}
+		}
+	}
+	/**
 	 * Update and save the options
 	 *
-	 * @param array $values The option values to update.
+	 * @param array $options The option values to update.
 	 */
-	public static function update( $values ) {
-		if ( current_user_can( 'manage_options' ) ) {
-			if ( update_option( 'wp_no_base_permalink', $values, 'no' ) ) {
-				delete_transient( '_wp_no_base_permalink_rewrite_rules' );
+	public static function update( $options ) {
+		if ( ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) && current_user_can( 'manage_options' ) ) {
+			if ( update_option( 'wp_no_base_permalink', $options, 'no' ) ) {
+				delete_transient( 'wp_no_base_permalink_rewrite_rules' );
 			}
-			self::$values = $values;
+			self::$options = $options;
 		}
 	}
 }

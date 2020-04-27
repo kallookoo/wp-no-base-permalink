@@ -3,9 +3,9 @@
  * Plugin Name: WP No Base Permalink
  * Plugin URI: https://wordpress.org/plugins/wp-no-base-permalink/
  * Description: Remove taxonomy slug and remove terms parents in hierarchical taxonomies from your permalinks.
- * Version: 2.0
+ * Version: 2.0.0
  * Author: Sergio ( kallookoo )
- * Author URI: http://dsergio.com/
+ * Author URI: https://dsergio.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-no-base-permalink
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'WP_NO_BASE_PERMALINK_FILE', __FILE__ );
 define( 'WP_NO_BASE_PERMALINK_VERSION', '2.0.0' );
-define( 'WP_NO_BASE_PERMALINK_ABSPATH', dirname( __FILE__ ) . '/' );
+define( 'WP_NO_BASE_PERMALINK_ABSPATH', __DIR__ . '/' );
 
 spl_autoload_register(
 	function ( $class ) {

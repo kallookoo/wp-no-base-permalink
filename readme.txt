@@ -18,7 +18,7 @@ Remove on hierarchical taxonomies the terms parents from your permalinks.
 
 The options above are optional and generate their own rewrite rules.
 
-Compatible with WPML Plugin and WordPress Multisite.
+Compatible with WPML Plugin and WordPress Multisite partially.
 
 Read the [FAQ](https://wordpress.org/plugins/wp-no-base-permalink/faq/) before use.
 
@@ -26,8 +26,8 @@ Read the [FAQ](https://wordpress.org/plugins/wp-no-base-permalink/faq/) before u
 
 1. Upload the 'wp-no-base-permalink' folder to the '/wp-content/plugins/' directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. You sould now be able to access your categories without category base.
-4. You can optionally configure other options from the permanent links page.
+3. Go to Permalinks settings and select any taxonomy to configure.
+4. Configure any options from the taxonomy settings section.
 
 == Frequently Asked Questions ==
 
@@ -38,6 +38,32 @@ Simply don't have a post/page and taxonomy ( if you use this option ) with the s
 = The plugin has been uninstalled, but the slug for taxonomy did not reappear why? =
 
 A particular installation does not allow the rewrite feature in disabling the plugin. Try after disabling the plugin, save permanent links again.
+
+= Why don't you have full support for multisite? =
+
+There is currently no secure method for regenerating rules at all sites when activated or deactivated on the network.
+Activating it for the entire network will have no effect until you visit the corresponding page of each site.
+
+= Are you a developer? =
+
+- Filter `wp_no_base_permalink_rewrite_groups`:
+Filters the value to use on array_chunk function for create multiple groups for keys or single groups.
+ Multiple groups: The group keys are longer and make fewer rules.
+ Single groups:   The group keys only define one term and make more rules.
+Default: 100. Only numeric is allowed.
+
+- Filter `wp_no_base_permalink_save_rewrite_rules`:
+Filters to save generated rewrite rules, to ensure the rewrtie rules is updated, and if enabled, the transient only is stored for one month.
+After created, edited, deleted any term for taxonomies always recreate the transient for save the rewrite rules.
+Default: true. Only boolean are allowed.
+
+- Filter `wp_no_base_permalink_redirect_status_code` and `wp_no_base_permalink_{$taxonomy}_redirect_status_code`:
+Filters the wp_safe_redirect status code. Default: 301. Only 300 headers are allowed.
+
+- Filter `wp_no_base_permalink_{$taxonomy->name}_base`:
+Filters the taxonomy slug aka base to redirects option. Use if the plugin not detect the original slug.
+Default: Empty String. Only support string or array.
+
 
 == Changelog ==
 = 2.0 =

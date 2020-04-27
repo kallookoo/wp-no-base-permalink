@@ -82,7 +82,7 @@ class Rewrite {
 	 * @param mixed ...$unused Unused.
 	 */
 	public function flush_rewrite_rules( ...$unused ) {
-		delete_transient( '_wp_no_base_permalink_rewrite_rules' );
+		delete_transient( 'wp_no_base_permalink_rewrite_rules' );
 		add_action( 'shutdown', '\flush_rewrite_rules', PHP_INT_MAX );
 	}
 
@@ -111,7 +111,7 @@ class Rewrite {
 	 * @return array            The default rewrite rules or plugin generated rules.
 	 */
 	private function generate_rules( $rules, $taxonomy ) {
-		if ( ! array_key_exists( $taxonomy, $this->options ) ) {
+		if ( ! array_key_exists( $taxonomy, $this->get_options() ) ) {
 			return $rules;
 		}
 
@@ -120,7 +120,7 @@ class Rewrite {
 			return $rules;
 		}
 
-		$transient = maybe_unserialize( get_transient( '_wp_no_base_permalink_rewrite_rules' ) );
+		$transient = maybe_unserialize( get_transient( 'wp_no_base_permalink_rewrite_rules' ) );
 		if ( is_array( $transient ) && array_key_exists( $taxonomy, $transient ) ) {
 			return $transient[ $taxonomy ];
 		}
@@ -242,15 +242,25 @@ class Rewrite {
 		}
 
 		if ( ! empty( $terms_rules ) ) {
-			if ( empty( $transient ) || ! is_array( $transient ) ) {
-				$transient = [ $taxonomy->name => $terms_rules ];
-			} else {
+			/**
+			 * Filters to save generated rewrite rules
+			 *
+			 * Note: To ensure the rewrtie rules is updated, the transient only is stored for one month.
+			 *
+			 * @param bool Save or not the generated rewrite rules. Default: True.
+			 */
+			$save_rewrite_rules = apply_filters( 'wp_no_base_permalink_save_rewrite_rules', true );
+			if ( wp_validate_boolean( $save_rewrite_rules ) ) {
+				if ( ! is_array( $transient ) ) {
+					$transient = [];
+				}
+
 				$transient[ $taxonomy->name ] = $terms_rules;
+
+				set_transient( 'wp_no_base_permalink_rewrite_rules', maybe_serialize( $transient ), MONTH_IN_SECONDS );
 			}
-			set_transient( '_wp_no_base_permalink_rewrite_rules', maybe_serialize( $transient ) );
 			return $terms_rules;
 		}
-
 		return $rules;
 	}
 
@@ -262,6 +272,9 @@ class Rewrite {
 	 * @return array            The terms list.
 	 */
 	private function get_terms_list( $taxonomy ) {
+		$priority_terms_clauses = false;
+		$priority_get_term      = false;
+
 		global $sitepress;
 		if ( $sitepress && ( $sitepress instanceof \SitePress ) ) {
 			$priority_terms_clauses = has_filter( 'terms_clauses', [ $sitepress, 'terms_clauses' ] );
@@ -310,14 +323,17 @@ class Rewrite {
 			}
 		}
 
-		if ( isset( $priority_terms_clauses ) && is_numeric( $priority_terms_clauses ) ) {
+		if ( $priority_terms_clauses || is_numeric( $priority_terms_clauses ) ) {
 			add_filter( 'terms_clauses', [ $sitepress, 'terms_clauses' ], $priority_terms_clauses, 3 );
 		}
 
-		if ( isset( $priority_get_term ) && is_numeric( $priority_get_term ) ) {
+		if ( $priority_get_term || is_numeric( $priority_get_term ) ) {
 			add_filter( 'get_term', [ $sitepress, 'get_term_adjust_id' ], $priority_get_term, 2 );
 		}
 
-		return ( empty( $terms_list ) ? new \WP_Error() : $terms_list );
+		if ( empty( $terms_list ) ) {
+			$terms_list = new \WP_Error( 'wp_no_base_permalink_terms_list', __( 'Empty Terms List', 'wp-no-base-permalink' ) );
+		}
+		return $terms_list;
 	}
 }

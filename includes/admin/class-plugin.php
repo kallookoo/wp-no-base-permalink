@@ -21,7 +21,9 @@ class Plugin {
 	/**
 	 * Action activate_
 	 *
-	 * @param bool $network_wide If enabled for all networking. Default: false.
+	 * @param bool $network_wide Whether to enable the plugin for all sites
+	 *                           in the network or just the current site.
+	 *                           Multisite only. Default: false.
 	 */
 	public static function on_activation( $network_wide = false ) {
 		if ( ! $network_wide ) {
@@ -45,7 +47,7 @@ class Plugin {
 					$taxonomies['post_tag']['redirects'] = $options['old-tag-redirect'];
 				}
 
-				Optiona::update(
+				Options::update(
 					[
 						'selected'   => array_keys( $taxonomies ),
 						'taxonomies' => $taxonomies,
@@ -58,11 +60,13 @@ class Plugin {
 	/**
 	 * Action deactivate_
 	 *
-	 * @param bool $network_wide If enabled for all networking. Default: false.
+	 * @param bool $network_wide Whether to enable the plugin for all sites
+	 *                           in the network or just the current site.
+	 *                           Multisite only. Default: false.
 	 */
 	public static function on_deactivation( $network_wide = false ) {
-		delete_option( 'wp_no_base_permalink' );
 		if ( ! $network_wide ) {
+			delete_transient( 'wp_no_base_permalink_rewrite_rules' );
 			add_action( 'shutdown', '\flush_rewrite_rules', PHP_INT_MAX );
 		}
 	}
@@ -87,95 +91,8 @@ class Plugin {
 		 * Settings API & Permalink Settings Page
 		 * http://core.trac.wordpress.org/ticket/9296
 		 */
-
-		$options = filter_input( INPUT_POST, 'wp-no-base-permalink', FILTER_UNSAFE_RAW, FILTER_REQUIRE_ARRAY );
-		if ( $options && current_user_can( 'manage_options' ) ) {
-			check_admin_referer( 'update-permalink' );
-
-			$sanitized = [
-				'taxonomies' => [],
-				'selected'   => [],
-			];
-
-			if ( array_key_exists( 'selected', $options ) ) {
-				$sanitized['selected'] = array_filter(
-					array_map(
-						'sanitize_text_field',
-						array_keys( $options['selected'] )
-					),
-					'taxonomy_exists'
-				);
-
-				foreach ( $sanitized['selected'] as $taxonomy ) {
-					$sanitized['taxonomies'][ $taxonomy ] = [
-						'remove'    => 'yes',
-						'redirects' => [],
-					];
-
-					if ( is_taxonomy_hierarchical( $taxonomy ) ) {
-						$sanitized['taxonomies'][ $taxonomy ]['parents'] = 'yes';
-					}
-				}
-			}
-
-			if ( array_key_exists( 'taxonomies', $options ) ) {
-				foreach ( $options['taxonomies'] as $taxonomy => $tax_options ) {
-					if ( in_array( $taxonomy, $sanitized['selected'], true ) && is_array( $tax_options ) ) {
-						$sanitized['taxonomies'][ $taxonomy ]['remove'] = (
-							array_key_exists( 'remove', $tax_options ) ? 'yes' : 'no'
-						);
-
-						if ( array_key_exists( 'parents', $sanitized['taxonomies'][ $taxonomy ] ) ) {
-							$sanitized['taxonomies'][ $taxonomy ]['parents'] = (
-								array_key_exists( 'parents', $tax_options ) ? 'yes' : 'no'
-							);
-						}
-
-						if ( array_key_exists( 'redirects', $tax_options ) ) {
-							$redirects = sanitize_text_field( $tax_options['redirects'] );
-							if ( $redirects ) {
-								$redirects = array_filter(
-									array_unique(
-										array_map(
-											function ( $a ) {
-												return trim( trim( $a ), '/' );
-											},
-											preg_split( '@(,| )@', normalize_whitespace( $redirects ) )
-										)
-									)
-								);
-								if ( $redirects ) {
-									$tax_obj = get_taxonomy( $taxonomy );
-									if ( $tax_obj instanceof \WP_Taxonomy ) {
-										if ( 'category' === $taxonomy ) {
-											$tax_slug = 'category';
-										} elseif ( 'post_tag' === $taxonomy ) {
-											$tax_slug = 'tag';
-										} elseif ( function_exists( '\wc_get_permalink_structure' ) ) {
-											if ( 'product_cat' === $taxonomy ) {
-												$tax_slug = _x( 'product-category', 'slug', 'woocommerce' );
-											} elseif ( 'product_tag' === $taxonomy ) {
-												$tax_slug = _x( 'product-tag', 'slug', 'woocommerce' );
-											}
-										}
-										$tax_slug  = ( empty( $tax_slug ) ? $tax_obj->rewrite['slug'] : $tax_slug );
-										$key_found = array_search( trim( $tax_slug, '/' ), $redirects, true );
-										if ( is_numeric( $key_found ) ) {
-											unset( $redirects[ $key_found ] );
-										}
-									}
-								}
-							}
-						}
-						$sanitized['taxonomies'][ $taxonomy ]['redirects'] = ( empty( $redirects ) ? [] : $redirects );
-					}
-				}
-			}
-
-			Options::update( $sanitized );
-		}
-
-		add_action( 'load-options-permalink.php', [ $this, 'load_options_permalink' ], PHP_INT_MAX );
+		add_action( 'load-options-permalink.php', '\kallookoo\NBP\Options::save', 10 );
+		add_action( 'load-options-permalink.php', [ $this, 'load_options_permalink' ], 20 );
 		add_action( 'load-plugins.php', [ $this, 'load_plugins' ], 10 );
 	}
 
@@ -240,25 +157,27 @@ class Plugin {
 				]
 			);
 
-			$tax_base = [];
 			$tax_slug = trim( $taxonomy->rewrite['slug'], '/' );
-			if ( has_filter( "wp_no_base_permalink_{$taxonomy->name}_base" ) ) {
-				$tax_base = apply_filters( "wp_no_base_permalink_{$taxonomy->name}_base", '', $taxonomy );
-				if ( ! empty( $tax_base ) ) {
-					if ( is_string( $tax_base ) ) {
-						$tax_base = [ $tax_base ];
-					}
-					if ( is_array( $tax_base ) ) {
-						$tax_base = array_map(
-							function ( $a ) {
-								return trim( sanitize_text_field( $a ), '/' );
-							},
-							array_filter( $tax_base, 'is_string' )
-						);
-					}
+			/**
+			 * Filters the taxonomy slug aka base to redirects option.
+			 *
+			 * @param string|array $tax_base Taxonomy slugs that the plugin does not detect.
+			 */
+			$tax_base = apply_filters( "wp_no_base_permalink_{$taxonomy->name}_base", '', $taxonomy );
+			if ( ! empty( $tax_base ) ) {
+				if ( is_string( $tax_base ) ) {
+					$tax_base = [ $tax_base ];
 				}
-				$tax_base = ( is_array( $tax_base ) ? array_filter( $tax_base ) : [] );
+				if ( is_array( $tax_base ) ) {
+					$tax_base = array_map(
+						function ( $a ) {
+							return trim( sanitize_text_field( $a ), '/' );
+						},
+						array_filter( $tax_base, 'is_string' )
+					);
+				}
 			}
+			$tax_base = ( is_array( $tax_base ) ? array_filter( $tax_base ) : [] );
 
 			if ( 'category' === $taxonomy->name ) {
 				$tax_base[] = 'category';

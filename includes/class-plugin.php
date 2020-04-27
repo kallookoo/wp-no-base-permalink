@@ -72,20 +72,19 @@ class Plugin {
 					/**
 					 * Filters the wp_safe_redirect status code.
 					 *
-					 * @var int
+					 * @param int $status HTTP response status code to use. Default: 301.
 					 */
-					$code = apply_filters( 'wp_no_base_permalink_redirect_code', 301 );
+					$status = apply_filters( 'wp_no_base_permalink_redirect_status_code', 301 );
 					/**
 					 * Filters the wp_safe_redirect status code by taxonomy.
 					 *
-					 * @var int
+					 * @param int $status HTTP response status code to use. Default: 301.
 					 */
-					$code = apply_filters( "wp_no_base_permalink_{$taxonomy}_redirect_code", $code );
+					$status = apply_filters( "wp_no_base_permalink_{$taxonomy}_redirect_status_code", $status );
+					$status = ( is_numeric( $status ) ? absint( $status ) : 301 );
+					$status = ( ( 301 <= $status || 308 >= $status ) ? $status : 301 );
 
-					$code = ( is_numeric( $code ) ? absint( $code ) : 301 );
-					$code = ( ( 301 <= $code || 308 >= $code ) ? $code : 301 );
-
-					wp_safe_redirect( $term_link, $code );
+					wp_safe_redirect( $term_link, $status );
 					exit;
 				}
 			}
@@ -102,8 +101,8 @@ class Plugin {
 	 *
 	 * @return string Term link URL.
 	 */
-	public function term_link( $termlink, $term, $taxonomy = '' ) {
-		if ( ! isset( $this->options[ $term->taxonomy ] ) ) {
+	public function term_link( $termlink, $term, $taxonomy ) {
+		if ( ! ( $term instanceof \WP_Term ) || ! array_key_exists( $term->taxonomy, $this->options ) ) {
 			return $termlink;
 		}
 
@@ -114,10 +113,10 @@ class Plugin {
 
 		$tax_slug = trim( $taxonomy->rewrite['slug'], '/' );
 		if ( 'no' === $this->options[ $taxonomy->name ]['parents'] ) {
-			$termlink = preg_replace( "@(/{$tax_slug}.*?/)({$term->slug}/?)$@", "/{$tax_slug}/$2", $termlink );
+			$termlink = preg_replace( "@(/{$tax_slug}.*?/)({$term->slug})/?$@", "/{$tax_slug}/$2", $termlink );
 		}
 		if ( 'yes' === $this->options[ $taxonomy->name ]['remove'] ) {
-			$termlink = str_replace( "/{$tax_slug}/", '/', $termlink );
+			$termlink = str_replace( "/{$tax_slug}", '/', $termlink );
 		}
 		return $termlink;
 	}

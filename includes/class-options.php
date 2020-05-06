@@ -31,17 +31,25 @@ class Options {
 	 * @return mixed
 	 */
 	private static function find( $name, $default, $options ) {
+		$value = $default;
 		if ( is_array( $options ) ) {
 			if ( array_key_exists( $name, $options ) ) {
-				return $options[ $name ];
-			}
-			foreach ( $options as $option ) {
-				$value = self::find( $name, null, $option );
-				if ( ! is_null( $value ) ) {
-					return $value;
+				$value = $options[ $name ];
+			} else {
+				foreach ( $options as $option ) {
+					$_value = self::find( $name, null, $option );
+					if ( ! is_null( $_value ) ) {
+						$value = $_value;
+						break;
+					}
 				}
 			}
 		}
+
+		if ( gettype( $value ) === gettype( $default ) ) {
+			return $value;
+		}
+
 		return $default;
 	}
 

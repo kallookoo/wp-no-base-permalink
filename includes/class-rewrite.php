@@ -29,9 +29,9 @@ class Rewrite {
 	 * Construct
 	 */
 	private function __construct() {
-		if ( get_option( 'permalink_structure' ) ) {
+		if ( ! empty( get_option( 'permalink_structure' ) ) ) {
 			$this->options = Options::get( 'taxonomies', [] );
-			if ( $this->options && is_array( $this->options ) ) {
+			if ( $this->options ) {
 				$taxonomies = [];
 				foreach ( $this->options as $taxonomy => $tax_options ) {
 					if ( ! taxonomy_exists( $taxonomy ) || ! is_array( $tax_options ) ) {

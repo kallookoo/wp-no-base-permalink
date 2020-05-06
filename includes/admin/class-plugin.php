@@ -113,6 +113,7 @@ class Plugin {
 			'show_ui' => true,
 			'public'  => true,
 		];
+
 		foreach ( get_taxonomies( $get_tax_args, 'objects' ) as $taxonomy => $tax_obj ) {
 			$taxonomies[ $taxonomy ] = $tax_obj;
 		}
@@ -140,9 +141,7 @@ class Plugin {
 			]
 		);
 
-		$taxonomies = Options::get( 'taxonomies', Options::get( 'selected', [] ) );
-		$taxonomies = ( is_array( $taxonomies ) ? $taxonomies : [] );
-		foreach ( $taxonomies as $taxonomy => $tax_options ) {
+		foreach ( Options::get( 'taxonomies', [] ) as $taxonomy => $tax_options ) {
 			$taxonomy = get_taxonomy( $taxonomy );
 			if ( ! ( $taxonomy instanceof \WP_Taxonomy ) ) {
 				continue;

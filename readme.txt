@@ -2,9 +2,9 @@
 Contributors: kallookoo
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7SFE48Y4FEQL
 Tags: permalink, taxonomy, taxonomy base, taxonomy slug, slug, terms, terms parents, terms slug, category, category base, tag, tag base
-Requires at least: 5.4
-Tested up to: 5.4
-Requires PHP: 7.3
+Requires at least: 5.0
+Tested up to: 5.4.1
+Requires PHP: 5.6
 Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

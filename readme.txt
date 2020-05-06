@@ -66,7 +66,7 @@ Default: Empty String. Only support string or array.
 
 
 == Changelog ==
-= 2.0 =
+= 2.0.0 =
 * The plugin support multiple taxonomies
 = 1.0 =
 * Rewrite plugin for resolve bug
